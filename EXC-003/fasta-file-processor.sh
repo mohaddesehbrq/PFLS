@@ -1,27 +1,27 @@
 #calculate numbers of seq
-num_seq=$(grep '>' "$1" |wc -l)
+num_seq=$(grep '>' "$1" | wc -l)
 
 
 #calculate total length
-total=$(awk '/^>/ {next} {printf}' "$1" |wc -c)
+total=$(awk '/^>/ {next} {printf}' "$1" | wc -c)
 
 
 #length of each sequence
-length=$(awk '/^>/ {next} {print length}' "$1")
+length=$(awk '/^>/ {next} {print length($0)}' "$1")
 
 
-longest=$(echo $length |sort -nr |head -n 1)
-shortest=$(echo $length |sort -n |head -n 1)
+longest=$(echo "$length" |sort -nr |head -n 1)
+shortest=$(echo "$length" |sort -n |head -n 1)
 
 
 #calculating average length
-ave=$(($total/$num_seq))
+ave=$(($total / $num_seq))
 
 
-c_num=$(awk '!/^>' {printf} "$1" |grep -o 'c' |wc -l )
-g_num=$(awk '!/^>' {printf} "$1" |grep -o 'g' |wc -l )
-cg_num=$((c_num+g_num))
-GC=$(($cg_num*100/$total))
+c_num=$(awk '!/^>/ {gsub(/[^C]/,""; print length}' "$1" | awk '{s+=$1} END {print s}')
+g_num=$(awk '!/^>/ {gsub(/[^G]/,""; print length}' "$1" | awk '{s+=$1} END {print s}' )
+cg_num=$((c_num + g_num))
+GC=$(($cg_num * 100 / $total))
 
 
 
