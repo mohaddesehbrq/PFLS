@@ -1,13 +1,13 @@
-#length of each sequence
-length=$(awk '/^>/ {next} {printf length}' "$1")
-
-
 #calculate numbers of seq
 num_seq=$(grep '>' "$1" |wc -l)
 
 
 #calculate total length
 total=$(awk '/^>/{next} {printf}' "$1" |wc -c)
+
+
+#length of each sequence
+length=$(awk '/^>/ {next} {print length}' "$1")
 
 
 longest=$(echo $length |sort -nr |head -n 1)
